@@ -27,8 +27,13 @@ public class QuoteRouter {
    */
   @Bean
   public RouterFunction<ServerResponse> route(QuoteHandler handler) {
-    return RouterFunctions.route(GET("/quotes")
-        .and(accept(MediaType.APPLICATION_JSON)), handler::fetchQuotes);
+    /*
+     * using functional composition to set up two routes; APPLICATION_JSON for one and APPLICATION_STREAM_JSON for the other
+     * same endpoint, but 2 different results depending on the accepted type
+     */
+    return RouterFunctions
+        .route(GET("/quotes").and(accept(MediaType.APPLICATION_JSON)), handler::fetchQuotes)
+        .andRoute(GET("/quotes").and(accept(MediaType.APPLICATION_STREAM_JSON)), handler::streamQuotes);
   }
 
 }
