@@ -21,10 +21,9 @@ import reactor.core.publisher.Mono;
 @Component
 public class QuoteHandler {
 
-  public final QuoteGeneratorService quoteGeneratorService;
+  private final QuoteGeneratorService quoteGeneratorService;
 
   public QuoteHandler(QuoteGeneratorService quoteGeneratorService) {
-    super();
     this.quoteGeneratorService = quoteGeneratorService;
   }
   
@@ -50,7 +49,7 @@ public class QuoteHandler {
    * @return
    */
   public Mono<ServerResponse> streamQuotes(ServerRequest request) {
-    return ok().contentType(MediaType.APPLICATION_JSON)
+    return ok().contentType(MediaType.APPLICATION_STREAM_JSON)
         .body(this.quoteGeneratorService.fetchQuoteStream(Duration.ofMillis(200)), Quote.class);
   }
 }
